@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnakkaZ API Tester</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .test-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+        .info { color: #60a5fa; }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .status.ok { background: #d1fae5; color: #065f46; }
+        .status.fail { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 SnakkaZ API Tester</h1>
+        <p class="subtitle">Test backend API endepunkter for snakkaz.com</p>
+
+        <!-- Health Check -->
+        <div class="test-section">
+            <h2>1. Health Check <span id="health-status" class="status"></span></h2>
+            <button onclick="testHealth()">Test Health</button>
+            <div id="health-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Register -->
+        <div class="test-section">
+            <h2>2. Registrering</h2>
+            <input type="text" id="reg-username" placeholder="Brukernavn (min 3 tegn)">
+            <input type="email" id="reg-email" placeholder="Email">
+            <input type="password" id="reg-password" placeholder="Passord (min 8 tegn)">
+            <button onclick="testRegister()">Registrer</button>
+            <div id="register-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Login -->
+        <div class="test-section">
+            <h2>3. Login</h2>
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Passord">
+            <button onclick="testLogin()">Logg inn</button>
+            <div id="login-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Chat Rooms -->
+        <div class="test-section">
+            <h2>4. Hent Chat Rooms (krever login)</h2>
+            <button onclick="testGetRooms()" id="rooms-btn" disabled>Hent Rooms</button>
+            <div id="rooms-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Create Room -->
+        <div class="test-section">
+            <h2>5. Opprett Chat Room (krever login)</h2>
+            <input type="text" id="room-name" placeholder="Rom navn">
+            <input type="text" id="room-desc" placeholder="Beskrivelse (valgfri)">
+            <button onclick="testCreateRoom()" id="create-room-btn" disabled>Opprett Rom</button>
+            <div id="create-room-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Send Message -->
+        <div class="test-section">
+            <h2>6. Send Melding (krever login og room)</h2>
+            <input type="number" id="msg-room-id" placeholder="Room ID (f.eks. 1)">
+            <input type="text" id="msg-content" placeholder="Melding">
+            <button onclick="testSendMessage()" id="send-msg-btn" disabled>Send Melding</button>
+            <div id="send-msg-output" class="output" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://snakkaz.com/api';
+        let authToken = null;
+
+        function showOutput(elementId, content, type = 'info') {
+            const output = document.getElementById(elementId);
+            output.style.display = 'block';
+            output.innerHTML = `<span class="${type}">${content}</span>`;
+        }
+
+        function enableAuthButtons() {
+            document.getElementById('rooms-btn').disabled = false;
+            document.getElementById('create-room-btn').disabled = false;
+            document.getElementById('send-msg-btn').disabled = false;
+        }
+
+        async function testHealth() {
+            try {
+                showOutput('health-output', 'Tester connection...', 'info');
+                const response = await fetch(`${API_BASE}/health.php`);
+                const data = await response.json();
+                
+                const statusEl = document.getElementById('health-status');
+                if (data.status === 'ok') {
+                    statusEl.className = 'status ok';
+                    statusEl.textContent = '✓ OK';
+                    showOutput('health-output', JSON.stringify(data, null, 2), 'success');
+                } else {
+                    statusEl.className = 'status fail';
+                    statusEl.textContent = '✗ FEIL';
+                    showOutput('health-output', JSON.stringify(data, null, 2), 'error');
+                }
+            } catch (error) {
+                document.getElementById('health-status').className = 'status fail';
+                document.getElementById('health-status').textContent = '✗ FEIL';
+                showOutput('health-output', `Feil: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRegister() {
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            if (!username || !email || !password) {
+                showOutput('register-output', 'Fyll ut alle feltene!', 'error');
+                return;
+            }
+
+            try {
+                showOutput('register-output', 'Registrerer...', 'info');
+                const response = await fetch(`${API_BASE}/auth/register.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, display_name: username })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    authToken = data.data.token;
+                    enableAuthButtons();
+                    showOutput('register-output', 
+                        `✓ Registrert!\nToken: ${authToken}\n\n` + JSON.stringify(data, null, 2), 
+                        'success');
+                } else {
+                    showOutput('register-output', JSON.stringify(data, null, 2), 'error');
+                }
+            } catch (error) {
+                showOutput('register-output', `Feil: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showOutput('login-output', 'Fyll ut alle feltene!', 'error');
+                return;
+            }
+
+            try {
+                showOutput('login-output', 'Logger inn...', 'info');
+                const response = await fetch(`${API_BASE}/auth/login.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    authToken = data.data.token;
+                    enableAuthButtons();
+                    showOutput('login-output', 
+                        `✓ Innlogget!\nToken: ${authToken}\n\n` + JSON.stringify(data, null, 2), 
+                        'success');
+                } else {
+                    showOutput('login-output', JSON.stringify(data, null, 2), 'error');
+                }
+            } catch (error) {
+                showOutput('login-output', `Feil: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetRooms() {
+            if (!authToken) {
+                showOutput('rooms-output', 'Du må logge inn først!', 'error');
+                return;
+            }
+
+            try {
+                showOutput('rooms-output', 'Henter rooms...', 'info');
+                const response = await fetch(`${API_BASE}/chat/rooms.php`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+                showOutput('rooms-output', JSON.stringify(data, null, 2), 
+                    data.success ? 'success' : 'error');
+            } catch (error) {
+                showOutput('rooms-output', `Feil: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCreateRoom() {
+            if (!authToken) {
+                showOutput('create-room-output', 'Du må logge inn først!', 'error');
+                return;
+            }
+
+            const name = document.getElementById('room-name').value;
+            const description = document.getElementById('room-desc').value;
+
+            if (!name) {
+                showOutput('create-room-output', 'Rom navn er påkrevd!', 'error');
+                return;
+            }
+
+            try {
+                showOutput('create-room-output', 'Oppretter room...', 'info');
+                const response = await fetch(`${API_BASE}/chat/rooms.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ 
+                        name, 
+                        description: description || null,
+                        type: 'group' 
+                    })
+                });
+
+                const data = await response.json();
+                showOutput('create-room-output', JSON.stringify(data, null, 2), 
+                    data.success ? 'success' : 'error');
+            } catch (error) {
+                showOutput('create-room-output', `Feil: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSendMessage() {
+            if (!authToken) {
+                showOutput('send-msg-output', 'Du må logge inn først!', 'error');
+                return;
+            }
+
+            const roomId = document.getElementById('msg-room-id').value;
+            const content = document.getElementById('msg-content').value;
+
+            if (!roomId || !content) {
+                showOutput('send-msg-output', 'Room ID og melding er påkrevd!', 'error');
+                return;
+            }
+
+            try {
+                showOutput('send-msg-output', 'Sender melding...', 'info');
+                const response = await fetch(`${API_BASE}/chat/send.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ 
+                        room_id: parseInt(roomId),
+                        content,
+                        message_type: 'text'
+                    })
+                });
+
+                const data = await response.json();
+                showOutput('send-msg-output', JSON.stringify(data, null, 2), 
+                    data.success ? 'success' : 'error');
+            } catch (error) {
+                showOutput('send-msg-output', `Feil: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-test health on load
+        window.addEventListener('load', () => {
+            setTimeout(testHealth, 500);
+        });
+    </script>
+</body>
+</html>
