@@ -1,0 +1,83 @@
+import { apiClient } from './api';
+import type { AuthResponse, LoginRequest, RegisterRequest, User } from '../types/auth.types';
+
+export const authService = {
+  /**
+   * Login user
+   */
+  async login(credentials: LoginRequest): Promise<AuthResponse> {
+    const response = await apiClient.post<AuthResponse['data']>('/auth/login.php', credentials);
+    
+    if (response.success && response.data) {
+      // Store token and user data
+      localStorage.setItem('auth_token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    
+    return {
+      success: response.success,
+      message: response.message,
+      data: response.data,
+    };
+  },
+
+  /**
+   * Register new user
+   */
+  async register(userData: RegisterRequest): Promise<AuthResponse> {
+    const response = await apiClient.post<AuthResponse['data']>('/auth/register.php', userData);
+    
+    if (response.success && response.data) {
+      // Store token and user data
+      localStorage.setItem('auth_token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    
+    return {
+      success: response.success,
+      message: response.message,
+      data: response.data,
+    };
+  },
+
+  /**
+   * Logout user
+   */
+  async logout(): Promise<void> {
+    try {
+      await apiClient.post('/auth/logout.php');
+    } finally {
+      // Clear local storage regardless of API response
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+    }
+  },
+
+  /**
+   * Get current user from localStorage
+   */
+  getCurrentUser(): User | null {
+    const userStr = localStorage.getItem('user');
+    if (!userStr) return null;
+    
+    try {
+      return JSON.parse(userStr);
+    } catch {
+      return null;
+    }
+  },
+
+  /**
+   * Get auth token
+   */
+  getToken(): string | null {
+    return localStorage.getItem('auth_token');
+  },
+
+  /**
+   * Check if user is authenticated
+   */
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  },
+};

@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAuthStore } from './store/authStore';
+import { useChatStore } from './store/chatStore';
+import { AuthLayout } from './components/Auth/AuthLayout';
+import { LoginForm } from './components/Auth/LoginForm';
+import { RegisterForm } from './components/Auth/RegisterForm';
+import { ChatWindow } from './components/Chat/ChatWindow';
+import { RoomSidebar } from './components/Chat/RoomSidebar';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+function ProtectedRoute({ children }: Readonly<{ children: React.ReactNode }>) {
+  const { token } = useAuthStore();
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
 }
 
-export default App
+function ChatLayout() {
+  const { rooms, activeRoomId, fetchRooms, setActiveRoom, fetchMessages } = useChatStore();
+
+  useEffect(() => {
+    fetchRooms();
+  }, [fetchRooms]);
+
+  const handleRoomSelect = (roomId: number) => {
+    setActiveRoom(roomId);
+    fetchMessages(roomId);
+  };
+
+  return (
+    <div className="chat-layout">
+      <RoomSidebar 
+        rooms={rooms}
+        activeRoomId={activeRoomId}
+        onRoomSelect={handleRoomSelect}
+      />
+      <ChatWindow roomId={activeRoomId} />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<AuthLayout><LoginForm /></AuthLayout>} />
+        <Route path="/register" element={<AuthLayout><RegisterForm /></AuthLayout>} />
+        <Route 
+          path="/chat" 
+          element={
+            <ProtectedRoute>
+              <ChatLayout />
+            </ProtectedRoute>
+          } 
+        />
+        <Route path="/" element={<Navigate to="/chat" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
