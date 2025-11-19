@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Auth - SnakkaZ</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 { color: #2481cc; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #e4e6eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        button {
+            background: #2481cc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover { background: #1a6aa8; }
+        .output {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { color: #2ecc71; font-weight: bold; }
+        .error { color: #e74c3c; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>🔐 SnakkaZ Auth Tester</h1>
+    
+    <div class="test-box">
+        <h2>1. Register New User</h2>
+        <input type="text" id="reg-username" placeholder="Username" value="demo123">
+        <input type="email" id="reg-email" placeholder="Email" value="demo123@test.com">
+        <input type="password" id="reg-password" placeholder="Password" value="Demo123456">
+        <input type="text" id="reg-display" placeholder="Display Name" value="Demo User">
+        <button onclick="testRegister()">Register</button>
+        <div id="reg-output" class="output" style="display:none;"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>2. Login</h2>
+        <input type="email" id="login-email" placeholder="Email" value="demo123@test.com">
+        <input type="password" id="login-password" placeholder="Password" value="Demo123456">
+        <button onclick="testLogin()">Login</button>
+        <div id="login-output" class="output" style="display:none;"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>3. Get Rooms (requires login)</h2>
+        <button onclick="testRooms()">Get Rooms</button>
+        <div id="rooms-output" class="output" style="display:none;"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://snakkaz.com/api';
+        let token = null;
+
+        async function testRegister() {
+            const output = document.getElementById('reg-output');
+            output.style.display = 'block';
+            output.innerHTML = 'Registering...';
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('reg-username').value,
+                        email: document.getElementById('reg-email').value,
+                        password: document.getElementById('reg-password').value,
+                        display_name: document.getElementById('reg-display').value
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    token = data.data.token;
+                    output.innerHTML = `<span class="success">✅ SUCCESS!</span>\n\nToken: ${token.substring(0,30)}...\n\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    output.innerHTML = `<span class="error">❌ FAILED</span>\n\n${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ ERROR</span>\n\n${error.message}`;
+            }
+        }
+
+        async function testLogin() {
+            const output = document.getElementById('login-output');
+            output.style.display = 'block';
+            output.innerHTML = 'Logging in...';
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('login-email').value,
+                        password: document.getElementById('login-password').value
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    token = data.data.token;
+                    output.innerHTML = `<span class="success">✅ SUCCESS!</span>\n\nToken: ${token.substring(0,30)}...\n\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    output.innerHTML = `<span class="error">❌ FAILED</span>\n\n${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ ERROR</span>\n\n${error.message}`;
+            }
+        }
+
+        async function testRooms() {
+            const output = document.getElementById('rooms-output');
+            output.style.display = 'block';
+
+            if (!token) {
+                output.innerHTML = '<span class="error">❌ Please login first!</span>';
+                return;
+            }
+
+            output.innerHTML = 'Fetching rooms...';
+
+            try {
+                const response = await fetch(`${API_URL}/chat/rooms.php`, {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    output.innerHTML = `<span class="success">✅ SUCCESS!</span>\n\nRooms: ${data.data?.length || 0}\n\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    output.innerHTML = `<span class="error">❌ FAILED</span>\n\n${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ ERROR</span>\n\n${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

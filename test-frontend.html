@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnakkaZ API Tester</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #2481cc;
+            margin-bottom: 1rem;
+        }
+        .test-section {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border: 1px solid #e4e6eb;
+            border-radius: 8px;
+        }
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        button {
+            background: linear-gradient(135deg, #2481cc 0%, #1a6aa8 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(36, 129, 204, 0.3);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e4e6eb;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            font-size: 1rem;
+        }
+        .output {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { color: #2ecc71; font-weight: bold; }
+        .error { color: #e74c3c; font-weight: bold; }
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .status.online { background: #d4edda; color: #155724; }
+        .status.offline { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 SnakkaZ API Tester</h1>
+        <p>Test your backend API before deploying frontend</p>
+
+        <!-- Health Check -->
+        <div class="test-section">
+            <h3>1. API Health Check</h3>
+            <button onclick="testHealth()">Test Health</button>
+            <div id="health-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Registration -->
+        <div class="test-section">
+            <h3>2. User Registration</h3>
+            <input type="text" id="reg-username" placeholder="Username" value="testuser">
+            <input type="email" id="reg-email" placeholder="Email" value="test@snakkaz.com">
+            <input type="password" id="reg-password" placeholder="Password" value="Test123456">
+            <input type="text" id="reg-displayname" placeholder="Display Name (optional)" value="Test User">
+            <button onclick="testRegister()">Register User</button>
+            <div id="register-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Login -->
+        <div class="test-section">
+            <h3>3. User Login</h3>
+            <input type="email" id="login-email" placeholder="Email" value="test@snakkaz.com">
+            <input type="password" id="login-password" placeholder="Password" value="Test123456">
+            <button onclick="testLogin()">Login</button>
+            <div id="login-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Chat Rooms -->
+        <div class="test-section">
+            <h3>4. Get Chat Rooms</h3>
+            <p style="font-size:0.875rem; color:#666;">Requires login first</p>
+            <button onclick="testGetRooms()">Get Rooms</button>
+            <div id="rooms-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Send Message -->
+        <div class="test-section">
+            <h3>5. Send Message</h3>
+            <input type="number" id="msg-room-id" placeholder="Room ID" value="1">
+            <input type="text" id="msg-content" placeholder="Message" value="Hello from API tester!">
+            <button onclick="testSendMessage()">Send Message</button>
+            <div id="message-output" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Results Summary -->
+        <div class="test-section">
+            <h3>📊 Test Results</h3>
+            <div id="summary"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://snakkaz.com/api';
+        let authToken = null;
+        let testResults = {
+            health: null,
+            register: null,
+            login: null,
+            rooms: null,
+            message: null
+        };
+
+        function updateSummary() {
+            const summary = document.getElementById('summary');
+            const total = Object.values(testResults).filter(v => v !== null).length;
+            const passed = Object.values(testResults).filter(v => v === true).length;
+            
+            summary.innerHTML = `
+                <p>Tests Run: ${total} / 5</p>
+                <p>Passed: <span class="success">${passed}</span></p>
+                <p>Failed: <span class="error">${total - passed}</span></p>
+            `;
+        }
+
+        async function testHealth() {
+            const output = document.getElementById('health-output');
+            output.style.display = 'block';
+            output.innerHTML = 'Testing...';
+
+            try {
+                const response = await fetch(`${API_URL}/health.php`);
+                const data = await response.json();
+                
+                if (data.status === 'ok' || data.status === 'degraded') {
+                    output.innerHTML = `<span class="success">✅ SUCCESS</span>\n${JSON.stringify(data, null, 2)}`;
+                    testResults.health = true;
+                } else {
+                    output.innerHTML = `<span class="error">❌ FAILED</span>\n${JSON.stringify(data, null, 2)}`;
+                    testResults.health = false;
+                }
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ ERROR</span>\n${error.message}`;
+                testResults.health = false;
+            }
+            updateSummary();
+        }
+
+        async function testRegister() {
+            const output = document.getElementById('register-output');
+            output.style.display = 'block';
+            output.innerHTML = 'Registering...';
+
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const display_name = document.getElementById('reg-displayname').value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, display_name })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    authToken = data.data.token;
+                    output.innerHTML = `<span class="success">✅ SUCCESS</span>\nToken: ${authToken.substring(0, 20)}...\n${JSON.stringify(data, null, 2)}`;
+                    testResults.register = true;
+                } else {
+                    output.innerHTML = `<span class="error">❌ FAILED</span>\n${JSON.stringify(data, null, 2)}`;
+                    testResults.register = false;
+                }
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ ERROR</span>\n${error.message}`;
+                testResults.register = false;
+            }
+            updateSummary();
+        }
+
+        async function testLogin() {
+            const output = document.getElementById('login-output');
+            output.style.display = 'block';
+            output.innerHTML = 'Logging in...';
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    authToken = data.data.token;
+                    output.innerHTML = `<span class="success">✅ SUCCESS</span>\nToken: ${authToken.substring(0, 20)}...\n${JSON.stringify(data, null, 2)}`;
+                    testResults.login = true;
+                } else {
+                    output.innerHTML = `<span class="error">❌ FAILED</span>\n${JSON.stringify(data, null, 2)}`;
+                    testResults.login = false;
+                }
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ ERROR</span>\n${error.message}`;
+                testResults.login = false;
+            }
+            updateSummary();
+        }
+
+        async function testGetRooms() {
+            const output = document.getElementById('rooms-output');
+            output.style.display = 'block';
+
+            if (!authToken) {
+                output.innerHTML = '<span class="error">❌ Please login first</span>';
+                return;
+            }
+
+            output.innerHTML = 'Fetching rooms...';
+
+            try {
+                const response = await fetch(`${API_URL}/chat/rooms.php`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    output.innerHTML = `<span class="success">✅ SUCCESS</span>\nRooms found: ${data.data?.length || 0}\n${JSON.stringify(data, null, 2)}`;
+                    testResults.rooms = true;
+                } else {
+                    output.innerHTML = `<span class="error">❌ FAILED</span>\n${JSON.stringify(data, null, 2)}`;
+                    testResults.rooms = false;
+                }
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ ERROR</span>\n${error.message}`;
+                testResults.rooms = false;
+            }
+            updateSummary();
+        }
+
+        async function testSendMessage() {
+            const output = document.getElementById('message-output');
+            output.style.display = 'block';
+
+            if (!authToken) {
+                output.innerHTML = '<span class="error">❌ Please login first</span>';
+                return;
+            }
+
+            output.innerHTML = 'Sending message...';
+
+            const room_id = parseInt(document.getElementById('msg-room-id').value);
+            const content = document.getElementById('msg-content').value;
+
+            try {
+                const response = await fetch(`${API_URL}/chat/send.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ room_id, content, message_type: 'text' })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    output.innerHTML = `<span class="success">✅ SUCCESS</span>\n${JSON.stringify(data, null, 2)}`;
+                    testResults.message = true;
+                } else {
+                    output.innerHTML = `<span class="error">❌ FAILED</span>\n${JSON.stringify(data, null, 2)}`;
+                    testResults.message = false;
+                }
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ ERROR</span>\n${error.message}`;
+                testResults.message = false;
+            }
+            updateSummary();
+        }
+
+        // Auto-test on load
+        window.onload = () => {
+            updateSummary();
+            console.log('SnakkaZ API Tester Ready!');
+            console.log('API URL:', API_URL);
+        };
+    </script>
+</body>
+</html>

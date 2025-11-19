@@ -1,5 +1,6 @@
 export interface User {
-  user_id: number;
+  id?: number | string; // Backend returns string ID
+  user_id?: number; // For compatibility
   username: string;
   email: string;
   display_name?: string;

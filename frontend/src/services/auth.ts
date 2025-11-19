@@ -9,9 +9,24 @@ export const authService = {
     const response = await apiClient.post<AuthResponse['data']>('/auth/login.php', credentials);
     
     if (response.success && response.data) {
+      // Normalize user data - backend returns 'id', we need 'user_id'
+      const normalizedUser = {
+        ...response.data.user,
+        user_id: Number(response.data.user.id || response.data.user.user_id),
+      };
+      
       // Store token and user data
       localStorage.setItem('auth_token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
+      
+      return {
+        success: response.success,
+        message: response.message,
+        data: {
+          ...response.data,
+          user: normalizedUser,
+        },
+      };
     }
     
     return {
@@ -28,9 +43,24 @@ export const authService = {
     const response = await apiClient.post<AuthResponse['data']>('/auth/register.php', userData);
     
     if (response.success && response.data) {
+      // Normalize user data - backend returns 'id', we need 'user_id'
+      const normalizedUser = {
+        ...response.data.user,
+        user_id: Number(response.data.user.id || response.data.user.user_id),
+      };
+      
       // Store token and user data
       localStorage.setItem('auth_token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
+      
+      return {
+        success: response.success,
+        message: response.message,
+        data: {
+          ...response.data,
+          user: normalizedUser,
+        },
+      };
     }
     
     return {

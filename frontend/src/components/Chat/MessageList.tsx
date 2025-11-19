@@ -82,7 +82,11 @@ export const MessageList = ({ messages, isLoading }: MessageListProps) => {
           </div>
           
           {msgs.map((message) => {
-            const isOwn = message.sender_id === user?.user_id;
+            const currentUserId = user?.user_id || user?.id;
+            const messageSenderId = typeof message.sender_id === 'string'
+              ? Number(message.sender_id)
+              : message.sender_id;
+            const isOwn = messageSenderId === currentUserId;
             
             return (
               <div

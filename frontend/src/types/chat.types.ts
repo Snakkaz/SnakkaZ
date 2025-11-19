@@ -3,7 +3,7 @@ import type { User } from './auth.types';
 export interface Message {
   message_id: number;
   room_id: number;
-  sender_id: number;
+  sender_id: number | string; // Backend may return string
   content: string;
   message_type: 'text' | 'image' | 'file' | 'system';
   file_url?: string;
