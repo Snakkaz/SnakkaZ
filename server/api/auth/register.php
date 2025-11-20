@@ -63,7 +63,7 @@ $db = Database::getInstance();
 
 // Check if username exists
 $existing = $db->fetchOne(
-    "SELECT id FROM users WHERE username = ? OR email = ?",
+    "SELECT user_id FROM users WHERE username = ? OR email = ?",
     [$input['username'], $input['email']]
 );
 
@@ -77,7 +77,7 @@ $passwordHash = Auth::hashPassword($input['password']);
 // Create user
 try {
     $db->execute(
-        "INSERT INTO users (username, email, password_hash, display_name, created_at) 
+        "INSERT INTO users (username, email, password_hash, display_name, created_at)
          VALUES (?, ?, ?, ?, NOW())",
         [
             $input['username'],
@@ -92,7 +92,7 @@ try {
     // Auto-join all public rooms
     $db->execute(
         "INSERT INTO room_members (room_id, user_id, role)
-         SELECT id, ?, 'member' FROM rooms WHERE privacy_level = 'public'",
+         SELECT room_id, ?, 'member' FROM rooms WHERE privacy_level = 'public'",
         [$userId]
     );
     
@@ -102,13 +102,13 @@ try {
     
     // Get user data
     $user = $db->fetchOne(
-        "SELECT id, username, email, display_name, avatar_url, status, created_at 
-         FROM users WHERE id = ?",
+        "SELECT user_id, username, email, display_name, avatar_url, status, created_at
+         FROM users WHERE user_id = ?",
         [$userId]
     );
     
-    // Add user_id alias for frontend compatibility
-    $user['user_id'] = $user['id'];
+    // Add id alias for consistency
+    $user['id'] = $user['user_id'];
     
     Response::success([
         'token' => $token,

@@ -1,0 +1,17 @@
+# Force PHP execution in /api/ directory
+<IfModule mod_php8.c>
+    php_flag opcache.enable Off
+    php_flag opcache.enable_cli Off
+</IfModule>
+
+# Ensure .php files are processed as PHP
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+# Disable caching for API responses
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</IfModule>

@@ -1,0 +1,16 @@
+# Disable LiteSpeed Cache for API endpoints
+<IfModule LiteSpeed>
+    CacheLookup off
+</IfModule>
+
+# Ensure PHP execution
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+# Disable all caching
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate, private"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</IfModule>

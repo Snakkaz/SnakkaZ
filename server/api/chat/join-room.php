@@ -44,19 +44,15 @@ $db = Database::getInstance();
 try {
     // Get room details
     $room = $db->fetchOne(
-        "SELECT id as room_id, name as room_name, privacy_level, password_hash, invite_only, 
-                max_members, is_active
-         FROM rooms 
-         WHERE id = ?",
+        "SELECT room_id, room_name, description, icon, is_public,
+                max_members, created_by, created_at
+         FROM rooms
+         WHERE room_id = ?",
         [$roomId]
     );
 
     if (!$room) {
         Response::error('Room not found', 404);
-    }
-
-    if (!$room['is_active']) {
-        Response::error('Room is not active', 403);
     }
 
     // Check if already a member
@@ -79,42 +75,10 @@ try {
         Response::error('Room is full', 403);
     }
 
-    // Handle different privacy levels
-    if ($room['privacy_level'] === 'password') {
-        // Verify password
-        if (!$password) {
-            Response::error('Password is required', 401);
-        }
-
-        if (!password_verify($password, $room['password_hash'])) {
-            Response::error('Incorrect password', 401);
-        }
-    } 
-    elseif ($room['privacy_level'] === 'private' || $room['invite_only']) {
-        // Verify invite code
-        if (!$inviteCode) {
-            Response::error('Invite code is required', 401);
-        }
-
-        $invite = $db->fetchOne(
-            "SELECT * FROM room_invites 
-             WHERE room_id = ? AND invite_code = ? 
-             AND (expires_at IS NULL OR expires_at > NOW())
-             AND (max_uses = 0 OR current_uses < max_uses)",
-            [$roomId, $inviteCode]
-        );
-
-        if (!$invite) {
-            Response::error('Invalid or expired invite code', 401);
-        }
-
-        // Update invite usage
-        $db->execute(
-            "UPDATE room_invites 
-             SET current_uses = current_uses + 1 
-             WHERE invite_id = ?",
-            [$invite['invite_id']]
-        );
+    // For now, allow joining if room is public
+    if (!$room['is_public']) {
+        // TODO: Add invite code verification when room_invites features are implemented
+        Response::error('This room is private', 403);
     }
 
     // Add user to room
@@ -125,7 +89,7 @@ try {
 
     // Send system message
     $db->execute(
-        "INSERT INTO messages (room_id, user_id, content, message_type) 
+        "INSERT INTO messages (room_id, user_id, content, message_type)
          VALUES (?, ?, ?, 'text')",
         [$roomId, $user['id'], $user['username'] . ' joined the room']
     );

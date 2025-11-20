@@ -37,7 +37,7 @@ $db = Database::getInstance();
 
 // Find user by email
 $user = $db->fetchOne(
-    "SELECT id, username, email, password_hash, display_name, avatar_url, status 
+    "SELECT user_id, username, email, password_hash, display_name, avatar_url, status 
      FROM users WHERE email = ?",
     [$input['email']]
 );
@@ -53,15 +53,15 @@ if (!Auth::verifyPassword($input['password'], $user['password_hash'])) {
 
 // Generate token
 $auth = new Auth();
-$token = $auth->generateToken($user['id']);
+$token = $auth->generateToken($user['user_id']);
 
 // Note: User status is updated in Auth::validateToken()
 
 // Remove password hash from response
 unset($user['password_hash']);
 
-// Add user_id alias for frontend compatibility
-$user['user_id'] = $user['id'];
+// Add id alias for consistency
+$user['id'] = $user['user_id'];
 
 Response::success([
     'token' => $token,

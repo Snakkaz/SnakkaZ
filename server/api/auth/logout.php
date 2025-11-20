@@ -42,7 +42,7 @@ if (!$token) {
 // Update user status to offline
 $db = Database::getInstance();
 $db->execute(
-    "UPDATE users SET status = 'offline', last_seen = NOW() WHERE id = ?",
+    "UPDATE users SET status = 'offline', last_seen = NOW() WHERE user_id = ?",
     [$user['user_id']]
 );
 

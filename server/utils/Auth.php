@@ -44,9 +44,9 @@ class Auth {
             return null;
         }
         
-        $sql = "SELECT s.*, u.id, u.username, u.email, u.display_name, u.avatar_url, u.status
+        $sql = "SELECT s.*, u.user_id, u.username, u.email, u.display_name, u.avatar_url, u.status
                 FROM sessions s
-                INNER JOIN users u ON s.user_id = u.id
+                INNER JOIN users u ON s.user_id = u.user_id
                 WHERE s.token = ? AND s.expires_at > NOW()
                 LIMIT 1";
         
@@ -56,11 +56,11 @@ class Auth {
             return null;
         }
         
-        // Add user_id alias for frontend compatibility
-        $session['user_id'] = $session['id'];
+        // Add id alias for backend compatibility (some code uses $user['id'])
+        $session['id'] = $session['user_id'];
         
         // Update user status to online
-        $this->updateUserStatus($session['id'], 'online');
+        $this->updateUserStatus($session['user_id'], 'online');
         
         return $session;
     }
@@ -124,7 +124,7 @@ class Auth {
      * Update user online status
      */
     private function updateUserStatus($userId, $status) {
-        $sql = "UPDATE users SET status = ?, last_seen = NOW() WHERE id = ?";
+        $sql = "UPDATE users SET status = ?, last_seen = NOW() WHERE user_id = ?";
         $this->db->execute($sql, [$status, $userId]);
     }
     

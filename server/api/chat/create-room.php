@@ -64,22 +64,19 @@ try {
 
     // Create room
     $db->execute(
-        "INSERT INTO rooms (name, type, privacy_level, password_hash, description, 
-                          invite_only, is_encrypted, max_members, creator_id, is_active, created_at) 
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())",
+        "INSERT INTO rooms (room_name, room_type, description,
+                          is_public, max_members, created_by, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, NOW())",
         [
             $roomName,
             $roomType,
-            $privacyLevel,
-            $passwordHash,
             $description,
-            $inviteOnly ? 1 : 0,
-            $isEncrypted ? 1 : 0,
+            $privacyLevel === 'public' ? 1 : 0,
             $maxMembers,
             $user['id']
         ]
     );
-    
+
     $roomId = $db->getConnection()->lastInsertId();
 
     // Add creator as admin member
@@ -93,7 +90,7 @@ try {
     if ($privacyLevel === 'private' || $inviteOnly) {
         $inviteCode = bin2hex(random_bytes(16));
         $db->execute(
-            "INSERT INTO room_invites (room_id, invited_by, invite_code, max_uses, current_uses) 
+            "INSERT INTO room_invites (room_id, invited_by, invite_code, max_uses, current_uses)
              VALUES (?, ?, ?, 0, 0)",
             [$roomId, $user['id'], $inviteCode]
         );
@@ -101,10 +98,10 @@ try {
 
     // Fetch created room
     $room = $db->fetchOne(
-        "SELECT id as room_id, name as room_name, type as room_type, privacy_level, description, 
-                invite_only, is_encrypted, max_members, creator_id as created_by, created_at
-         FROM rooms 
-         WHERE id = ?",
+        "SELECT room_id, room_name, room_type, description,
+                icon, is_public, max_members, created_by, created_at
+         FROM rooms
+         WHERE room_id = ?",
         [$roomId]
     );
 
