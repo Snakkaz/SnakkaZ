@@ -4,12 +4,12 @@
  * PDO-based database wrapper with prepared statements
  */
 
-// Try new config file first, fallback to old
-if (file_exists(__DIR__ . '/../config/db-config.php')) {
-    require_once __DIR__ . '/../config/db-config.php';
-} else {
-    require_once __DIR__ . '/../config/database.php';
-}
+// DIRECT CREDENTIALS to avoid cache issues
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'snakqsqe_SnakkaZ');
+define('DB_USER', 'snakqsqe_roun765');
+define('DB_PASS', 'sNAKKAz2025!');
+define('DB_CHARSET', 'utf8mb4');
 
 class Database {
     private static $instance = null;

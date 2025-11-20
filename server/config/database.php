@@ -14,8 +14,8 @@ if (function_exists('opcache_invalidate')) {
 // Database Configuration
 define('DB_HOST', 'localhost');                    // Namecheap shared hosting
 define('DB_NAME', 'snakqsqe_SnakkaZ');             // Database name
-define('DB_USER', 'cpses_sn5s7siq5y');             // phpMyAdmin user (CORRECT!)
-define('DB_PASS', 'C1vTRVmuczB1HgiiFPC02aUI6RkwVCLq');  // phpMyAdmin password
+define('DB_USER', 'snakqsqe_roun765');             // Database user with ALL PRIVILEGES ✅
+define('DB_PASS', 'sNAKKAz2025!');                 // Database password ✅
 define('DB_CHARSET', 'utf8mb4');
 
 // Application Settings
