@@ -11,7 +11,7 @@ interface AuthStore extends AuthState {
   setUser: (user: User | null) => void;
   setError: (error: string | null) => void;
   clearError: () => void;
-  initAuth: () => void;
+  initAuth: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -23,30 +23,42 @@ export const useAuthStore = create<AuthStore>((set) => ({
   error: null,
 
   // Initialize auth from localStorage
-  initAuth: () => {
+  initAuth: async () => {
     const token = authService.getToken();
     const user = authService.getCurrentUser();
     
     console.log('🔐 Init auth:', { token: !!token, user: !!user });
-    console.log('🔐 Token value:', token?.substring(0, 20) + '...');
-    console.log('🔐 User value:', user);
     
     if (token && user) {
-      console.log('✅ Setting authenticated state');
-      set({
-        user,
-        token,
-        isAuthenticated: true,
-      });
+      console.log('🔐 Token found, validating with backend...');
       
-      // Connect WebSocket (non-blocking)
-      try {
-        websocketService.connect(token);
-      } catch (error) {
-        console.error('⚠️ WebSocket connect failed:', error);
+      // Validate token with backend
+      const validUser = await authService.validateToken();
+      
+      if (validUser) {
+        console.log('✅ Token valid, setting authenticated state');
+        set({
+          user: validUser,
+          token,
+          isAuthenticated: true,
+        });
+        
+        // Connect WebSocket (non-blocking)
+        try {
+          websocketService.connect(token);
+        } catch (error) {
+          console.error('⚠️ WebSocket connect failed:', error);
+        }
+      } else {
+        console.warn('❌ Token invalid/expired, clearing auth');
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+        });
       }
     } else {
-      console.warn('❌ Auth init failed - missing token or user');
+      console.log('ℹ️ No saved auth found');
     }
   },
 

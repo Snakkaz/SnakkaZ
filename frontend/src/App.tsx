@@ -84,17 +84,35 @@ function ChatLayout() {
   const { initAuth, isAuthenticated } = useAuthStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Initialize authentication from localStorage on app start - SYNCHRONOUSLY
+  // Initialize authentication from localStorage on app start
   useEffect(() => {
     console.log('🚀 App mounting - initializing auth...');
-    initAuth();
-    setIsInitialized(true);
-  }, []);
+    
+    const init = async () => {
+      await initAuth();
+      setIsInitialized(true);
+      console.log('✅ Auth initialization complete');
+    };
+    
+    init();
+  }, [initAuth]);
 
-  // Don't render routes until auth is initialized
+  // Show loading state while validating token with backend
   if (!isInitialized) {
     console.log('⏳ Waiting for auth initialization...');
-    return null; // or a loading spinner
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        background: '#0a0e0f',
+        color: '#00ff41',
+        fontSize: '1.2rem'
+      }}>
+        <div>🔐 Authenticating...</div>
+      </div>
+    );
   }
 
   console.log('✅ App initialized, isAuthenticated:', isAuthenticated);

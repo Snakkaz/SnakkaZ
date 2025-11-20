@@ -114,4 +114,33 @@ export const authService = {
   isAuthenticated(): boolean {
     return !!this.getToken();
   },
+
+  /**
+   * Validate token with backend
+   * Returns user data if valid, null if invalid/expired
+   */
+  async validateToken(): Promise<User | null> {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      // Try to fetch user's rooms - if token is valid, this will succeed
+      // This doubles as both token validation and initial data fetch
+      const response = await apiClient.get<any>('/chat/rooms.php');
+      
+      if (response.success) {
+        // Token is valid, return cached user
+        return this.getCurrentUser();
+      }
+      
+      // Token invalid
+      return null;
+    } catch (error) {
+      // Token expired or invalid - clear storage
+      console.warn('⚠️ Token validation failed:', error);
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      return null;
+    }
+  },
 };

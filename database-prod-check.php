@@ -3,13 +3,7 @@
  * SnakkaZ Chat - Database Configuration
  * 
  * Update these values with your actual Namecheap cPanel credentials
- * Last Updated: 2025-11-20 17:00
  */
-
-// Disable OPcache for this file to prevent caching issues
-if (function_exists('opcache_invalidate')) {
-    opcache_invalidate(__FILE__, true);
-}
 
 // Database Configuration
 define('DB_HOST', 'localhost');                    // Namecheap shared hosting

@@ -1,0 +1,9 @@
+# Disable caching for config files
+<Files "database.php">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</Files>
+
+# Disable OPcache for config directory
+php_flag opcache.enable Off
