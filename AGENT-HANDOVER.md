@@ -9,23 +9,26 @@
 
 ## 📋 NÅVÆRENDE SITUASJON
 
-### ✅ PROBLEM LØST! (20. nov 2025 14:40)
-- **Login fungerer nå!** - Database credentials fikset
-- **Root cause:** Database bruker var feil (`cpses_sn151brm8f` → `cpses_sn5s7siq5y`)
-- **Auto-login ved refresh:** ✅ Fungerer perfekt
-- **Frontend:** ✅ Chat interface laster direkte
+### ✅ PROBLEM LØST! (20. nov 2025 16:15)
+- **Schema-feil fikset!** - Alle SQL queries oppdatert til CLEAN-IMPORT schema
+- **Root cause #1:** Database credentials var feil (cpses_sn151brm8f → cpses_sn5s7siq5y)
+- **Root cause #2:** Code brukte `id` men database har `user_id`/`room_id`
+- **Auto-login:** ✅ Fungerer perfekt med localStorage token
+- **Frontend:** ✅ Chat interface laster direkte på refresh
 
 ### Hva Som Fungerer
 ✅ Frontend bygger uten errors (601.59 KB JS, 34.48 KB CSS)  
 ✅ FTP deployment fungerer (deploy-full.py)  
-✅ Database migrering kjørt i phpMyAdmin (room privacy features)  
-✅ Alle PHP-filer bruker korrekte kolonnenavn (id, name, type)
+✅ Database schema matches CLEAN-IMPORT.sql (user_id, room_id, session_id)  
+✅ Auth.php validerer tokens korrekt med user_id JOIN  
+✅ Alle API endpoints oppdatert: login, register, logout, rooms, create-room, join-room  
+✅ send.php, messages.php, reactions.php, search.php allerede korrekt
 
-### Hva Som IKKE Fungerer
-❌ Login endpoint (/api/auth/login.php) - 500 error  
-❌ Rooms endpoint (/api/chat/rooms.php) - Database connection  
-❌ User authentication flow  
-❌ Room creation/listing
+### Hva Som Må Testes
+⚠️ Login endpoint (/api/auth/login.php) - nylig deployet  
+⚠️ Rooms endpoint (/api/chat/rooms.php) - schema fikset  
+⚠️ Create room flow - INSERT queries oppdatert  
+⚠️ Send/receive messages - trenger end-to-end test
 
 ---
 
@@ -45,16 +48,26 @@ Charset:  utf8mb4
 
 ### Tabeller (13 total)
 ```sql
-✅ users (id, username, email, password_hash, display_name, status, last_seen)
-✅ rooms (id, name, type, creator_id, privacy_level, password_hash, is_encrypted, max_members)
+✅ users (user_id, username, email, password_hash, display_name, status, last_seen)
+✅ rooms (room_id, room_name, room_type, created_by, description, icon, is_public, max_members)
 ✅ room_members (id, room_id, user_id, role)
-✅ messages (id, room_id, user_id, content, message_type, created_at)
-✅ sessions (id, user_id, token, expires_at)
+✅ messages (message_id, room_id, user_id, content, message_type, created_at)
+✅ sessions (session_id, user_id, token, expires_at)
 ✅ room_invites (invite_id, room_id, invited_by, invite_code, max_uses)
 ✅ room_join_requests (request_id, room_id, user_id, status)
+✅ message_reactions (id, message_id, user_id, emoji)
+✅ message_read_receipts (id, message_id, user_id, read_at)
+✅ typing_indicators (user_id, room_id, last_typed_at)
+✅ user_settings (user_id, setting_key, setting_value)
+✅ uploads (upload_id, user_id, filename, file_type, file_path)
 ```
 
-**VIKTIG:** Primary keys er `id` (IKKE `user_id` eller `room_id`)
+**VIKTIG:** Schema bruker descriptive primary keys:
+- `user_id` (IKKE `id`) for users tabell
+- `room_id` (IKKE `id`) for rooms tabell  
+- `message_id` for messages tabell
+- `session_id` for sessions tabell
+- Referert fra CLEAN-IMPORT.sql (production schema)
 
 ### Siste Migrering
 Kjørt: `SIMPLE-MIGRATION.sql` (uten foreign keys for kompatibilitet)
