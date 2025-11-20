@@ -3,7 +3,7 @@ import type { AxiosInstance } from 'axios';
 import type { ApiResponse, ApiError } from '../types/api.types';
 
 // API Base URL - adjust based on environment
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://snakkaz.com/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.snakkaz.com/api';
 
 class ApiClient {
   private readonly client: AxiosInstance;

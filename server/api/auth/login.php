@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-require_once __DIR__ . '/../../config/database.php';
-require_once __DIR__ . '/../../utils/Database.php';
+// Database.php now has inline credentials - no need for database.php
+require_once __DIR__ . '/../../utils/DB.php';  // Using DB.php instead of Database.php
 require_once __DIR__ . '/../../utils/Response.php';
 require_once __DIR__ . '/../../utils/Auth.php';
 
@@ -33,7 +33,7 @@ if (empty($input['email']) || empty($input['password'])) {
     Response::error('Email and password are required', 400);
 }
 
-$db = Database::getInstance();
+$db = DB::getInstance();
 
 // Find user by email
 $user = $db->fetchOne(

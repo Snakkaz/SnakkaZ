@@ -4,14 +4,14 @@
  * JWT-based authentication (simplified for shared hosting)
  */
 
-require_once __DIR__ . '/Database.php';
+require_once __DIR__ . '/DB.php';  // Using new DB.php to avoid cache
 require_once __DIR__ . '/Response.php';
 
 class Auth {
     private $db;
     
     public function __construct() {
-        $this->db = Database::getInstance();
+        $this->db = DB::getInstance();
     }
     
     /**

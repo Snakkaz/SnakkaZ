@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-require_once __DIR__ . '/../../config/database.php';
+// Database.php now has inline credentials
 require_once __DIR__ . '/../../utils/Auth.php';
 require_once __DIR__ . '/../../utils/Response.php';
 
