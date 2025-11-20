@@ -15,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-require_once __DIR__ . '/../utils/Database.php';
-require_once __DIR__ . '/../utils/Response.php';
-require_once __DIR__ . '/../utils/Auth.php';
+require_once __DIR__ . '/../../utils/Database.php';
+require_once __DIR__ . '/../../utils/Response.php';
+require_once __DIR__ . '/../../utils/Auth.php';
 
 // Only allow POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -43,11 +43,10 @@ if (empty($input['content'])) {
 $roomId = $input['room_id'];
 $content = trim($input['content']);
 $messageType = $input['message_type'] ?? 'text';
-$replyToId = $input['reply_to_id'] ?? null;
 
 // Check if user is member of room
 $isMember = $db->fetchOne(
-    "SELECT id FROM room_members WHERE room_id = ? AND user_id = ?",
+    "SELECT 1 FROM room_members WHERE room_id = ? AND user_id = ?",
     [$roomId, $user['user_id']]
 );
 
@@ -63,33 +62,34 @@ if (!in_array($messageType, ['text', 'image', 'file', 'audio', 'video'])) {
 // Insert message
 try {
     $messageId = $db->insert(
-        "INSERT INTO messages (room_id, user_id, content, message_type, reply_to_id, created_at) 
-         VALUES (?, ?, ?, ?, ?, NOW())",
-        [$roomId, $user['user_id'], $content, $messageType, $replyToId]
+        "INSERT INTO messages (room_id, user_id, content, message_type, created_at) 
+         VALUES (?, ?, ?, ?, NOW())",
+        [$roomId, $user['user_id'], $content, $messageType]
     );
     
     // Update room updated_at
     $db->execute(
-        "UPDATE rooms SET updated_at = NOW() WHERE id = ?",
+        "UPDATE rooms SET updated_at = NOW() WHERE room_id = ?",
         [$roomId]
     );
     
     // Get the created message with user info
     $message = $db->fetchOne(
         "SELECT 
-            m.id,
+            m.message_id,
             m.room_id,
             m.user_id,
             m.content,
             m.message_type,
-            m.reply_to_id,
+            m.is_edited,
             m.created_at,
+            m.updated_at,
             u.username,
             u.display_name,
             u.avatar_url
          FROM messages m
-         INNER JOIN users u ON m.user_id = u.id
-         WHERE m.id = ?",
+         INNER JOIN users u ON m.user_id = u.user_id
+         WHERE m.message_id = ?",
         [$messageId]
     );
     

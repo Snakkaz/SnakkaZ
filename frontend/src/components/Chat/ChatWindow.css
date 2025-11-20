@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #f8f9fa;
+  background: var(--background);
 }
 
 .chat-window-empty {
@@ -11,38 +11,41 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  color: #666;
+  background: var(--background);
+  color: var(--text-dim);
 }
 
 .chat-window-empty h2 {
   font-size: 28px;
   font-weight: 600;
-  color: #333;
+  color: var(--primary-color);
   margin-bottom: 12px;
+  font-family: 'Courier New', monospace;
+  text-shadow: var(--glow);
 }
 
 .chat-window-empty p {
   font-size: 16px;
-  color: #666;
+  color: var(--text-secondary);
+  font-family: 'Courier New', monospace;
 }
 
 .chat-window-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 1rem;
   padding: 16px 20px;
-  background: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
+  background: var(--surface);
+  border-bottom: 2px solid var(--border-bright);
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .chat-header-info {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex: 1;
-  min-width: 0;
+  min-width: 200px;
 }
 
 .chat-header-text {
@@ -53,20 +56,23 @@
 .chat-header-text h2 {
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: var(--primary-color);
   margin: 0 0 4px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 3px var(--neon-glow);
 }
 
 .chat-description {
   font-size: 13px;
-  color: #666;
+  color: var(--text-dim);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: 'Courier New', monospace;
 }
 
 .chat-header-actions {
@@ -79,19 +85,21 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: none;
+  border: 1px solid var(--border);
   background: transparent;
-  color: #666;
+  color: var(--text-dim);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: var(--transition);
 }
 
 .chat-action-btn:hover {
-  background: #f4f4f5;
-  color: #2481cc;
+  background: var(--hover);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  box-shadow: var(--glow);
 }
 
 /* Responsive */

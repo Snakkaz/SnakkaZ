@@ -27,15 +27,26 @@ export const useAuthStore = create<AuthStore>((set) => ({
     const token = authService.getToken();
     const user = authService.getCurrentUser();
     
+    console.log('🔐 Init auth:', { token: !!token, user: !!user });
+    console.log('🔐 Token value:', token?.substring(0, 20) + '...');
+    console.log('🔐 User value:', user);
+    
     if (token && user) {
+      console.log('✅ Setting authenticated state');
       set({
         user,
         token,
         isAuthenticated: true,
       });
       
-      // Connect WebSocket
-      websocketService.connect(token);
+      // Connect WebSocket (non-blocking)
+      try {
+        websocketService.connect(token);
+      } catch (error) {
+        console.error('⚠️ WebSocket connect failed:', error);
+      }
+    } else {
+      console.warn('❌ Auth init failed - missing token or user');
     }
   },
 

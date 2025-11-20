@@ -4,6 +4,10 @@
  * POST /api/auth/register.php
  */
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -15,9 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-require_once __DIR__ . '/../utils/Database.php';
-require_once __DIR__ . '/../utils/Response.php';
-require_once __DIR__ . '/../utils/Auth.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../utils/Database.php';
+require_once __DIR__ . '/../../utils/Response.php';
+require_once __DIR__ . '/../../utils/Auth.php';
 
 // Only allow POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -71,7 +76,7 @@ $passwordHash = Auth::hashPassword($input['password']);
 
 // Create user
 try {
-    $userId = $db->insert(
+    $db->execute(
         "INSERT INTO users (username, email, password_hash, display_name, created_at) 
          VALUES (?, ?, ?, ?, NOW())",
         [
@@ -80,6 +85,15 @@ try {
             $passwordHash,
             $input['display_name'] ?? $input['username']
         ]
+    );
+    
+    $userId = $db->getConnection()->lastInsertId();
+    
+    // Auto-join all public rooms
+    $db->execute(
+        "INSERT INTO room_members (room_id, user_id, role)
+         SELECT id, ?, 'member' FROM rooms WHERE privacy_level = 'public'",
+        [$userId]
     );
     
     // Generate token
@@ -93,6 +107,9 @@ try {
         [$userId]
     );
     
+    // Add user_id alias for frontend compatibility
+    $user['user_id'] = $user['id'];
+    
     Response::success([
         'token' => $token,
         'user' => $user
@@ -100,5 +117,5 @@ try {
     
 } catch (Exception $e) {
     error_log('Registration error: ' . $e->getMessage());
-    Response::serverError('Registration failed');
+    Response::serverError('Registration failed: ' . $e->getMessage());
 }

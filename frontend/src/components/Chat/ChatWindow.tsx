@@ -4,6 +4,7 @@ import { useChatStore } from '../../store/chatStore';
 import { useAuthStore } from '../../store/authStore';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
+import { TypingIndicator } from './TypingIndicator';
 import { Avatar } from '../Common/Avatar';
 import { websocketService } from '../../services/websocket';
 import './ChatWindow.css';
@@ -14,10 +15,16 @@ interface ChatWindowProps {
 
 export const ChatWindow = ({ roomId }: ChatWindowProps) => {
   const { user } = useAuthStore();
-  const { rooms, messages, sendMessage, markAsRead, fetchMessages } = useChatStore();
+  const { rooms, messages, isTyping, typingUsers, sendMessage, markAsRead, fetchMessages } = useChatStore();
   
   const room = roomId ? rooms.find(r => r.room_id === roomId) : null;
   const roomMessages = roomId ? (messages[roomId] || []) : [];
+  const typingUserIds = roomId ? (isTyping[roomId] || []) : [];
+  
+  // Filter out current user from typing list and get usernames
+  const typingUsernames = typingUserIds
+    .filter(userId => userId !== user?.user_id)
+    .map(userId => typingUsers[userId] || `User ${userId}`);
 
   useEffect(() => {
     if (roomId) {
@@ -26,14 +33,15 @@ export const ChatWindow = ({ roomId }: ChatWindowProps) => {
     }
   }, [roomId, fetchMessages, markAsRead]);
 
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = async (content: string, fileUrl?: string) => {
     if (!user || !roomId) return;
     
     try {
       await sendMessage({
         room_id: roomId,
         content,
-        message_type: 'text',
+        message_type: fileUrl ? 'file' : 'text',
+        file_url: fileUrl,
       });
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -68,9 +76,14 @@ export const ChatWindow = ({ roomId }: ChatWindowProps) => {
           />
           <div className="chat-header-text">
             <h2>{room.room_name}</h2>
-            {room.description && (
-              <p className="chat-description">{room.description}</p>
-            )}
+            <div className="chat-header-meta">
+              {room.description && (
+                <p className="chat-description">{room.description}</p>
+              )}
+              <span className="room-members-count">
+                {room.members?.length || 0} members
+              </span>
+            </div>
           </div>
         </div>
 
@@ -88,6 +101,8 @@ export const ChatWindow = ({ roomId }: ChatWindowProps) => {
       </div>
 
       <MessageList messages={roomMessages} />
+      
+      <TypingIndicator usernames={typingUsernames} />
 
       <MessageInput
         onSend={handleSendMessage}

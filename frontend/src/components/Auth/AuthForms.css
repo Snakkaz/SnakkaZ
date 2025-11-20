@@ -5,9 +5,39 @@
   flex-direction: column;
   gap: 1.5rem;
   padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(0, 255, 65, 0.1),
+    inset 0 0 30px rgba(0, 255, 65, 0.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--primary-color), 
+    transparent
+  );
+  animation: borderScan 3s linear infinite;
+}
+
+@keyframes borderScan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .auth-form-header {
@@ -18,23 +48,30 @@
 .auth-form-header h1 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #333;
+  color: var(--primary-color);
   margin: 0 0 0.5rem 0;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 5px var(--neon-glow);
 }
 
 .auth-form-header p {
   font-size: 1rem;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0;
+  font-family: 'Courier New', monospace;
 }
 
 .auth-error {
   padding: 0.75rem 1rem;
-  background: #fee;
-  border: 1px solid #fcc;
-  border-radius: 8px;
-  color: #e74c3c;
+  background: rgba(255, 23, 68, 0.1);
+  border: 1px solid var(--error);
+  border-radius: var(--border-radius);
+  color: var(--error);
   font-size: 0.875rem;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 10px rgba(255, 23, 68, 0.2);
 }
 
 .auth-form-footer {
@@ -45,15 +82,20 @@
 .auth-form-footer p {
   margin: 0;
   font-size: 0.9375rem;
-  color: #666;
+  color: var(--text-dim);
+  font-family: 'Courier New', monospace;
 }
 
 .auth-form-footer a {
-  color: #2481cc;
+  color: var(--primary-color);
   text-decoration: none;
   font-weight: 600;
+  transition: var(--transition);
+  text-shadow: 0 0 3px transparent;
 }
 
 .auth-form-footer a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  text-shadow: 0 0 5px var(--neon-glow);
+  color: var(--primary-dark);
 }

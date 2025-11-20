@@ -22,15 +22,13 @@ class Auth {
         $expiresAt = date('Y-m-d H:i:s', time() + JWT_EXPIRY);
         
         // Store token in sessions table
-        $sql = "INSERT INTO sessions (user_id, token, expires_at, ip_address, user_agent) 
-                VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO sessions (user_id, token, expires_at) 
+                VALUES (?, ?, ?)";
         
         $params = [
             $userId,
             $token,
-            $expiresAt,
-            $_SERVER['REMOTE_ADDR'] ?? null,
-            $_SERVER['HTTP_USER_AGENT'] ?? null
+            $expiresAt
         ];
         
         $this->db->query($sql, $params);
@@ -58,8 +56,11 @@ class Auth {
             return null;
         }
         
+        // Add user_id alias for frontend compatibility
+        $session['user_id'] = $session['id'];
+        
         // Update user status to online
-        $this->updateUserStatus($session['user_id'], 'online');
+        $this->updateUserStatus($session['id'], 'online');
         
         return $session;
     }
@@ -81,6 +82,20 @@ class Auth {
         }
         
         return $user;
+    }
+    
+    /**
+     * Authenticate request and return user or null
+     * Does not terminate on failure
+     */
+    public function authenticateRequest() {
+        $token = $this->getBearerToken();
+        
+        if (!$token) {
+            return null;
+        }
+        
+        return $this->validateToken($token);
     }
     
     /**

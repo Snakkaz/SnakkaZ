@@ -1,0 +1,43 @@
+/* Join Room Modal */
+.join-room-modal {
+  background: var(--surface);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3), 0 0 0 1px rgba(0, 255, 65, 0.2);
+  animation: slideUp 0.3s ease-out;
+}
+
+.room-info {
+  padding: 1rem;
+  background: var(--background);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.room-info h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.25rem;
+  color: var(--primary-color);
+  font-family: 'Courier New', monospace;
+}
+
+.privacy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid var(--primary-color);
+  border-radius: 20px;
+  color: var(--primary-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.privacy-badge svg {
+  flex-shrink: 0;
+}

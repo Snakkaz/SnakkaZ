@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ChatState, Message, SendMessageRequest } from '../types/chat.types';
+import type { ChatState, Message, SendMessageRequest, OnlineUser } from '../types/chat.types';
 import { chatService } from '../services/chat';
 import { websocketService } from '../services/websocket';
 
@@ -12,6 +12,8 @@ interface ChatStore extends ChatState {
   addMessage: (message: Message) => void;
   addTypingUser: (roomId: number, userId: number) => void;
   removeTypingUser: (roomId: number, userId: number) => void;
+  setTypingUsername: (userId: number, username: string) => void;
+  setOnlineUsers: (roomId: number, users: OnlineUser[]) => void;
   markAsRead: (roomId: number) => void;
   initWebSocket: () => void;
   cleanupWebSocket: () => void;
@@ -23,6 +25,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   messages: {},
   activeRoomId: null,
   isTyping: {},
+  typingUsers: {},
+  onlineUsers: {},
   isLoading: false,
   error: null,
 
@@ -86,7 +90,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       });
       
       // Also send via WebSocket for realtime
-      websocketService.sendMessage(message);
+      if (get().activeRoomId) {
+        websocketService.sendMessage(get().activeRoomId!, message.content);
+      }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to send message';
       set({ error: errorMessage });
@@ -173,6 +179,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     });
   },
 
+  // Set username for typing user
+  setTypingUsername: (userId: number, username: string) => {
+    const typingUsers = get().typingUsers;
+    set({
+      typingUsers: {
+        ...typingUsers,
+        [userId]: username,
+      },
+    });
+  },
+
+  // Set online users for a room
+  setOnlineUsers: (roomId: number, users: OnlineUser[]) => {
+    const onlineUsers = get().onlineUsers;
+    set({
+      onlineUsers: {
+        ...onlineUsers,
+        [roomId]: users,
+      },
+    });
+  },
+
   // Mark messages as read
   markAsRead: async (roomId: number) => {
     try {
@@ -195,16 +223,55 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   // Initialize WebSocket listeners
   initWebSocket: () => {
-    websocketService.onMessageReceived((message: Message) => {
+    console.log('🔌 Initializing WebSocket listeners');
+    
+    websocketService.on('message', (data: any) => {
+      const message: Message = {
+        message_id: data.message.message_id,
+        room_id: data.message.room_id,
+        sender_id: data.message.user_id,
+        user_id: data.message.user_id,
+        content: data.message.content,
+        message_type: data.message.message_type || 'text',
+        is_edited: false,
+        created_at: data.message.created_at,
+        updated_at: data.message.updated_at,
+        username: data.message.username,
+        display_name: data.message.display_name,
+        avatar_url: data.message.avatar_url,
+        reactions: data.message.reactions || []
+      };
       get().addMessage(message);
     });
     
-    websocketService.onUserTyping(({ room_id, user_id }) => {
-      get().addTypingUser(room_id, user_id);
+    websocketService.on('typing', (data: any) => {
+      console.log('⌨️ Typing event:', data);
+      if (data.isTyping && data.userId) {
+        get().addTypingUser(data.roomId, data.userId);
+        if (data.username) {
+          get().setTypingUsername(data.userId, data.username);
+        }
+      } else if (data.userId) {
+        get().removeTypingUser(data.roomId, data.userId);
+      }
     });
     
-    websocketService.onUserStoppedTyping(({ room_id, user_id }) => {
-      get().removeTypingUser(room_id, user_id);
+    websocketService.on('typing_clear', (data: any) => {
+      // Clear all typing indicators for room
+      const state = get();
+      set({
+        isTyping: {
+          ...state.isTyping,
+          [data.roomId]: []
+        }
+      });
+    });
+
+    websocketService.on('online_users', (data: any) => {
+      console.log('🟢 Online users update:', data);
+      if (data.roomId && data.users) {
+        get().setOnlineUsers(data.roomId, data.users);
+      }
     });
   },
 

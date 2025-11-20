@@ -1,5 +1,6 @@
 import type { Room } from '../../types/chat.types';
 import { Avatar } from '../Common/Avatar';
+import { Lock, Key, Globe, Plus, Settings } from 'lucide-react';
 import { format } from 'date-fns';
 import './RoomSidebar.css';
 
@@ -7,9 +8,11 @@ interface RoomSidebarProps {
   rooms: Room[];
   activeRoomId: number | null;
   onRoomSelect: (roomId: number) => void;
+  onCreateRoom?: () => void;
+  onOpenSettings?: () => void;
 }
 
-export const RoomSidebar = ({ rooms, activeRoomId, onRoomSelect }: RoomSidebarProps) => {
+export const RoomSidebar = ({ rooms, activeRoomId, onRoomSelect, onCreateRoom, onOpenSettings }: RoomSidebarProps) => {
   const formatLastMessageTime = (timestamp?: string) => {
     if (!timestamp) return '';
     
@@ -32,10 +35,34 @@ export const RoomSidebar = ({ rooms, activeRoomId, onRoomSelect }: RoomSidebarPr
     return text.substring(0, maxLength) + '...';
   };
 
+  const getPrivacyIcon = (privacyLevel?: string) => {
+    switch (privacyLevel) {
+      case 'password':
+        return <Lock size={14} className="privacy-icon" />;
+      case 'private':
+        return <Key size={14} className="privacy-icon" />;
+      case 'public':
+      default:
+        return <Globe size={14} className="privacy-icon" />;
+    }
+  };
+
   return (
     <div className="room-sidebar">
       <div className="room-sidebar-header">
         <h2>Chats</h2>
+        <div className="header-actions">
+          {onOpenSettings && (
+            <button className="settings-btn" onClick={onOpenSettings} title="Settings">
+              <Settings size={20} />
+            </button>
+          )}
+          {onCreateRoom && (
+            <button className="create-room-btn" onClick={onCreateRoom} title="Create new room">
+              <Plus size={20} />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="room-list">
@@ -58,7 +85,10 @@ export const RoomSidebar = ({ rooms, activeRoomId, onRoomSelect }: RoomSidebarPr
 
               <div className="room-info">
                 <div className="room-header">
-                  <h3 className="room-name">{room.room_name}</h3>
+                  <div className="room-name-container">
+                    <h3 className="room-name">{room.room_name}</h3>
+                    {room.privacy_level && getPrivacyIcon(room.privacy_level)}
+                  </div>
                   {room.last_message && (
                     <span className="room-time">
                       {formatLastMessageTime(room.last_message.created_at)}

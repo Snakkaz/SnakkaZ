@@ -12,13 +12,13 @@
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # API Routes - Redirect to api folder
-    RewriteCond %{REQUEST_URI} ^/api/
-    RewriteRule ^api/(.*)$ api/$1 [L]
+    # Don't rewrite actual files and directories
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
 
-    # Frontend Routes - Serve React app
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
+    # Frontend Routes - Serve React app (only for non-api requests)
+    RewriteCond %{REQUEST_URI} !^/api/
     RewriteRule ^(.*)$ index.html [L]
 </IfModule>
 

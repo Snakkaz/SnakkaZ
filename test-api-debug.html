@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SnakkaZ API Test</title>
+</head>
+<body>
+    <h1>API Endpoint Tests</h1>
+    
+    <h2>Test 1: Rooms API</h2>
+    <button onclick="testRooms()">Test GET /api/chat/rooms.php</button>
+    <pre id="rooms-result"></pre>
+    
+    <h2>Test 2: Create Room</h2>
+    <button onclick="testCreateRoom()">Test POST /api/chat/create-room.php</button>
+    <pre id="create-result"></pre>
+    
+    <h2>Test 3: Health Check</h2>
+    <button onclick="testHealth()">Test /api/health.php</button>
+    <pre id="health-result"></pre>
+    
+    <script>
+        const API_URL = 'https://snakkaz.com/api';
+        const TOKEN = localStorage.getItem('token');
+        
+        async function testRooms() {
+            try {
+                const response = await fetch(`${API_URL}/chat/rooms.php`, {
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
+                });
+                const text = await response.text();
+                document.getElementById('rooms-result').textContent = 
+                    `Status: ${response.status}\n${text}`;
+            } catch (error) {
+                document.getElementById('rooms-result').textContent = 
+                    `Error: ${error.message}`;
+            }
+        }
+        
+        async function testCreateRoom() {
+            try {
+                const response = await fetch(`${API_URL}/chat/create-room.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: 'Test Room',
+                        type: 'group',
+                        description: 'Test'
+                    })
+                });
+                const text = await response.text();
+                document.getElementById('create-result').textContent = 
+                    `Status: ${response.status}\n${text}`;
+            } catch (error) {
+                document.getElementById('create-result').textContent = 
+                    `Error: ${error.message}`;
+            }
+        }
+        
+        async function testHealth() {
+            try {
+                const response = await fetch(`${API_URL}/health.php`);
+                const text = await response.text();
+                document.getElementById('health-result').textContent = 
+                    `Status: ${response.status}\n${text}`;
+            } catch (error) {
+                document.getElementById('health-result').textContent = 
+                    `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

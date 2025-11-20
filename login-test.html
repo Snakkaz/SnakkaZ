@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SnakkaZ Login Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #0a0e0f; color: #00ff41; }
+        input, button { padding: 10px; margin: 5px; }
+        button { background: #00ff41; color: #0a0e0f; border: none; cursor: pointer; }
+        pre { background: #1a1e1f; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>SnakkaZ Login Debug</h1>
+    
+    <div>
+        <input type="email" id="email" placeholder="Email" value="stianpm@gmail.com">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="testLogin()">Test Login</button>
+    </div>
+    
+    <h3>Response:</h3>
+    <pre id="result"></pre>
+    
+    <script>
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('https://snakkaz.com/api/auth/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const text = await response.text();
+                document.getElementById('result').textContent = 
+                    `Status: ${response.status}\n\n${text}`;
+                
+                if (response.ok) {
+                    const data = JSON.parse(text);
+                    if (data.token) {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        alert('Login successful! Token saved. You can now go to https://snakkaz.com');
+                    }
+                }
+            } catch (error) {
+                document.getElementById('result').textContent = 
+                    `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

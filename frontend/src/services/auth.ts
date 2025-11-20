@@ -9,15 +9,19 @@ export const authService = {
     const response = await apiClient.post<AuthResponse['data']>('/auth/login.php', credentials);
     
     if (response.success && response.data) {
-      // Normalize user data - backend returns 'id', we need 'user_id'
+      // Normalize user data - ensure user_id is a number
+      const userData = response.data.user;
       const normalizedUser = {
-        ...response.data.user,
-        user_id: Number(response.data.user.id || response.data.user.user_id),
+        ...userData,
+        user_id: Number(userData.user_id || userData.id),
+        id: Number(userData.user_id || userData.id),
       };
       
       // Store token and user data
       localStorage.setItem('auth_token', response.data.token);
       localStorage.setItem('user', JSON.stringify(normalizedUser));
+      
+      console.log('✅ Login stored:', { token: response.data.token.substring(0, 10) + '...', user: normalizedUser.username });
       
       return {
         success: response.success,

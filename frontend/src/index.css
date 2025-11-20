@@ -1,33 +1,50 @@
 :root {
-  /* Colors - Telegram inspired */
-  --primary-color: #2481cc;
-  --primary-dark: #1a6aa8;
-  --secondary-color: #54a9eb;
-  --background: #ffffff;
-  --surface: #f0f2f5;
-  --text-primary: #000000;
-  --text-secondary: #707579;
-  --border: #e4e6eb;
-  --message-bubble-own: #2481cc;
-  --message-bubble-other: #ffffff;
-  --message-text-own: #ffffff;
-  --message-text-other: #000000;
-  --hover: #f0f2f5;
-  --active: #e4e6eb;
-  --success: #4caf50;
-  --error: #f44336;
-  --warning: #ff9800;
+  /* 🔒 MATRIX DARK THEME - Anonymous & Secure */
+  /* Backgrounds - Deep Black */
+  --background: #0a0e0f;
+  --surface: #0f1419;
+  --bg-tertiary: #151b21;
+  --hover: #1a2229;
+  --active: #1f272e;
+  
+  /* Neon Green - Matrix Style */
+  --primary-color: #00ff41;
+  --primary-dark: #00cc33;
+  --secondary-color: #009926;
+  --neon-glow: rgba(0, 255, 65, 0.5);
+  
+  /* Text */
+  --text-primary: #e8f5e9;
+  --text-secondary: #a5d6a7;
+  --text-dim: #66bb6a;
+  
+  /* Borders */
+  --border: #1b5e20;
+  --border-bright: #00ff41;
+  
+  /* Message Bubbles */
+  --message-bubble-own: #1b5e20;
+  --message-bubble-other: #0f1419;
+  --message-text-own: #00ff41;
+  --message-text-other: #a5d6a7;
+  
+  /* Status Colors */
+  --success: #00ff41;
+  --error: #ff1744;
+  --warning: #ffc107;
   
   /* Typography */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.5;
+  font-family: 'Courier New', monospace, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.6;
   font-weight: 400;
   
   /* Misc */
-  --border-radius: 8px;
-  --border-radius-sm: 4px;
-  --border-radius-lg: 12px;
-  --transition: all 0.2s ease;
+  --border-radius: 6px;
+  --border-radius-sm: 3px;
+  --border-radius-lg: 10px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --glow: 0 0 10px var(--neon-glow);
+  --shadow: 0 4px 16px rgba(0, 255, 65, 0.1);
   
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -76,23 +93,31 @@ input, textarea {
   font-family: inherit;
 }
 
-/* Scrollbar styles */
+/* Scrollbar - Matrix Green */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--surface);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c4c9cc;
-  border-radius: 3px;
+  background: var(--primary-dark);
+  border-radius: 4px;
+  border: 1px solid var(--border);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8adb0;
+  background: var(--primary-color);
+  box-shadow: var(--glow);
+}
+
+/* Selection - Neon Green */
+::selection {
+  background: var(--primary-color);
+  color: var(--background);
 }
 
 /* Utility classes */
@@ -103,8 +128,44 @@ input, textarea {
   border-top-color: var(--primary-color);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+  box-shadow: var(--glow);
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Matrix text effect */
+.matrix-text {
+  color: var(--primary-color);
+  text-shadow: 0 0 5px var(--neon-glow);
+  font-family: 'Courier New', monospace;
+}
+
+/* Incognito badge */
+.incognito-badge {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 4px 10px;
+  border-radius: var(--border-radius);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: var(--glow);
+}
+
+/* Security indicator */
+.secure-connection {
+  color: var(--success);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.secure-connection::before {
+  content: '🔒';
+}
+

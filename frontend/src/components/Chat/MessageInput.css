@@ -1,10 +1,94 @@
 .message-input-container {
   display: flex;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
   padding: 1rem;
-  background: white;
-  border-top: 1px solid #e4e6eb;
+  background: var(--surface);
+  border-top: 1px solid var(--border-bright);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: rgba(0, 255, 65, 0.05);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.file-preview-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  font-family: 'Courier New', monospace;
+}
+
+.file-size {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+}
+
+.file-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  transition: all 0.2s;
+}
+
+.file-remove-btn:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.message-input-wrapper {
+  display: flex;
+  gap: 0.5rem;
   align-items: flex-end;
+}
+
+.message-input-actions {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.attachment-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+}
+
+.attachment-button:hover:not(:disabled) {
+  background-color: var(--hover);
+  color: var(--primary-color);
+  box-shadow: var(--glow);
+}
+
+.attachment-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .message-input {
@@ -12,25 +96,27 @@
   min-height: 40px;
   max-height: 120px;
   padding: 0.75rem 1rem;
-  font-family: inherit;
+  font-family: 'Courier New', monospace;
   font-size: 1rem;
-  color: #333;
-  background: #f0f2f5;
-  border: 2px solid transparent;
-  border-radius: 20px;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border);
+  border-radius: var(--border-radius-lg);
   outline: none;
   resize: none;
-  transition: all 0.2s ease;
+  transition: var(--transition);
   overflow-y: auto;
 }
 
 .message-input:focus {
-  background: white;
-  border-color: #2481cc;
+  background: var(--surface);
+  border-color: var(--primary-color);
+  box-shadow: var(--glow);
 }
 
 .message-input::placeholder {
-  color: #999;
+  color: var(--text-dim);
+  opacity: 0.5;
 }
 
 .message-input:disabled {

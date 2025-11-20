@@ -15,9 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-require_once __DIR__ . '/../utils/Database.php';
-require_once __DIR__ . '/../utils/Response.php';
-require_once __DIR__ . '/../utils/Auth.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../utils/Database.php';
+require_once __DIR__ . '/../../utils/Response.php';
+require_once __DIR__ . '/../../utils/Auth.php';
 
 // Only allow POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -54,14 +55,13 @@ if (!Auth::verifyPassword($input['password'], $user['password_hash'])) {
 $auth = new Auth();
 $token = $auth->generateToken($user['id']);
 
-// Update last seen
-$db->execute(
-    "UPDATE users SET status = 'online', last_seen = NOW() WHERE id = ?",
-    [$user['id']]
-);
+// Note: User status is updated in Auth::validateToken()
 
 // Remove password hash from response
 unset($user['password_hash']);
+
+// Add user_id alias for frontend compatibility
+$user['user_id'] = $user['id'];
 
 Response::success([
     'token' => $token,

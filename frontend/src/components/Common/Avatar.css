@@ -53,20 +53,41 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 25%;
-  height: 25%;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 2px solid #0a0e0f;
+  box-shadow: 0 0 0 1px rgba(0, 255, 65, 0.2);
+}
+
+.avatar-sm .avatar-status {
+  width: 8px;
+  height: 8px;
+  border-width: 1.5px;
+}
+
+.avatar-lg .avatar-status {
+  width: 14px;
+  height: 14px;
+}
+
+.avatar-xl .avatar-status {
+  width: 18px;
+  height: 18px;
+  border-width: 3px;
 }
 
 .avatar-status-online {
-  background: #2ecc71;
+  background: #00ff41;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
 }
 
 .avatar-status-offline {
-  background: #95a5a6;
+  background: #444;
+  box-shadow: none;
 }
 
 .avatar-status-away {
-  background: #f39c12;
+  background: #ffa500;
+  box-shadow: 0 0 8px rgba(255, 165, 0, 0.6);
 }

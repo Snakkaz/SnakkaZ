@@ -1,0 +1,271 @@
+/* Settings Modal */
+.settings-modal {
+  background: var(--surface);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3), 0 0 0 1px rgba(0, 255, 65, 0.2);
+  animation: slideUp 0.3s ease-out;
+}
+
+.settings-modal .modal-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.settings-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.settings-tabs {
+  width: 200px;
+  background: var(--background);
+  border-right: 1px solid var(--border);
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.settings-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.settings-tab:hover {
+  background: var(--hover);
+  color: var(--text-primary);
+}
+
+.settings-tab.active {
+  background: rgba(0, 255, 65, 0.1);
+  border-left-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.settings-body {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.settings-section h3 {
+  margin: 0 0 1.5rem 0;
+  color: var(--primary-color);
+  font-size: 1.25rem;
+  font-family: 'Courier New', monospace;
+}
+
+.setting-item {
+  margin-bottom: 2rem;
+}
+
+.setting-item > label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.setting-item input[type="text"],
+.setting-item textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.setting-item input[type="text"]:focus,
+.setting-item textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 255, 65, 0.1);
+}
+
+.setting-item input.disabled-input {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.setting-item small {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+.setting-item textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Toggle Label */
+.toggle-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--background);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.toggle-label:hover {
+  background: var(--hover);
+}
+
+.toggle-label > div {
+  flex: 1;
+}
+
+.toggle-label strong {
+  display: block;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.toggle-label p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.toggle-label > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #444;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--primary-color);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(24px);
+}
+
+.toggle-switch input:disabled + .toggle-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.settings-footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .settings-modal {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .settings-content {
+    flex-direction: column;
+  }
+
+  .settings-tabs {
+    width: 100%;
+    display: flex;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+    overflow-x: auto;
+  }
+
+  .settings-tab {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .settings-tab.active {
+    border-left: none;
+    border-bottom-color: var(--primary-color);
+  }
+
+  .settings-body {
+    padding: 1.5rem;
+  }
+
+  .settings-footer {
+    flex-direction: column-reverse;
+  }
+
+  .settings-footer button {
+    width: 100%;
+  }
+}

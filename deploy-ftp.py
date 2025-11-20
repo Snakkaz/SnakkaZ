@@ -8,7 +8,7 @@ FTP_HOST = "ftp.snakkaz.com"
 FTP_USER = "admin@snakkaz.com"
 FTP_PASS = "SnakkaZ123!!"
 LOCAL_DIR = "/workspaces/SnakkaZ/frontend/dist"
-REMOTE_DIR = "/public_html"
+REMOTE_DIR = "/"
 
 def upload_file(ftp, local_path, remote_path):
     """Upload a single file"""

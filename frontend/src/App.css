@@ -1,13 +1,42 @@
 .chat-layout {
-  display: flex;
+  display: grid;
+  grid-template-columns: 280px 1fr 250px;
   width: 100vw;
   height: 100vh;
-  background-color: var(--background);
+  background: linear-gradient(135deg, var(--background) 0%, #050808 100%);
   overflow: hidden;
+  position: relative;
+}
+
+/* Matrix rain background effect */
+.chat-layout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 65, 0.03) 2px,
+      rgba(0, 255, 65, 0.03) 4px
+    );
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+@media (max-width: 1024px) {
+  .chat-layout {
+    grid-template-columns: 280px 1fr;
+  }
 }
 
 @media (max-width: 768px) {
   .chat-layout {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }
+
