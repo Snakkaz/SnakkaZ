@@ -1,0 +1,238 @@
+[19-Nov-2025 12:02:08 Europe/Oslo] PHP Warning:  require_once(/home/snakqsqe/public_html/api/../utils/Database.php): Failed to open stream: No such file or directory in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:02:08 Europe/Oslo] PHP Fatal error:  Uncaught Error: Failed opening required '/home/snakqsqe/public_html/api/../utils/Database.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/snakqsqe/public_html/api/health.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:02:15 Europe/Oslo] PHP Warning:  require_once(/home/snakqsqe/public_html/api/../utils/Database.php): Failed to open stream: No such file or directory in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:02:15 Europe/Oslo] PHP Fatal error:  Uncaught Error: Failed opening required '/home/snakqsqe/public_html/api/../utils/Database.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/snakqsqe/public_html/api/health.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:02:18 Europe/Oslo] PHP Warning:  require_once(/home/snakqsqe/public_html/api/../utils/Database.php): Failed to open stream: No such file or directory in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:02:18 Europe/Oslo] PHP Fatal error:  Uncaught Error: Failed opening required '/home/snakqsqe/public_html/api/../utils/Database.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/snakqsqe/public_html/api/health.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:02:56 Europe/Oslo] PHP Warning:  require_once(/home/snakqsqe/public_html/api/../utils/Database.php): Failed to open stream: No such file or directory in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:02:56 Europe/Oslo] PHP Fatal error:  Uncaught Error: Failed opening required '/home/snakqsqe/public_html/api/../utils/Database.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/snakqsqe/public_html/api/health.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:02:57 Europe/Oslo] PHP Warning:  require_once(/home/snakqsqe/public_html/api/../utils/Database.php): Failed to open stream: No such file or directory in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:02:57 Europe/Oslo] PHP Fatal error:  Uncaught Error: Failed opening required '/home/snakqsqe/public_html/api/../utils/Database.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/snakqsqe/public_html/api/health.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:03:05 Europe/Oslo] PHP Warning:  require_once(/home/snakqsqe/public_html/api/../utils/Database.php): Failed to open stream: No such file or directory in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:03:05 Europe/Oslo] PHP Fatal error:  Uncaught Error: Failed opening required '/home/snakqsqe/public_html/api/../utils/Database.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/snakqsqe/public_html/api/health.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/snakqsqe/public_html/api/health.php on line 10
+[19-Nov-2025 12:04:41 Europe/Oslo] Database Connection Error: SQLSTATE[42000] [1044] Access denied for user 'snakqsqe_SnakkaZ'@'localhost' to database 'snakqsqe_snakkaz'
+[19-Nov-2025 12:05:31 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'snakqsqe_snakkaz'@'localhost' (using password: YES)
+[19-Nov-2025 12:12:23 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'snakqsqe_roun765'@'localhost' (using password: YES)
+[19-Nov-2025 12:12:57 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'snakqsqe_roun765'@'localhost' (using password: YES)
+[19-Nov-2025 16:18:13 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 16:18:13 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/login.php(41): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 16:18:27 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 16:18:27 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/login.php(41): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 16:23:01 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 16:23:01 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/login.php(41): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 16:23:44 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 16:23:44 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:16:46 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:16:46 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/login.php(41): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:19:14 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:19:14 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:22:34 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:22:34 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:24:11 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:24:11 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:24:24 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:24:24 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:27:48 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:27:48 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:32:04 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:32:04 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:32:12 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:32:12 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:32:20 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:32:20 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:33:29 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT'
+[19-Nov-2025 17:33:29 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/auth/register.php(62): Database->fetchOne()
+#3 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:43:07 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT'
+[19-Nov-2025 17:43:07 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/utils/Auth.php(55): Database->fetchOne()
+#3 /home/snakqsqe/public_html/api/utils/Auth.php(77): Auth->validateToken()
+#4 /home/snakqsqe/public_html/api/chat/rooms.php(23): Auth->getCurrentUser()
+#5 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:55:45 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT'
+[19-Nov-2025 17:55:45 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/utils/Auth.php(55): Database->fetchOne()
+#3 /home/snakqsqe/public_html/api/utils/Auth.php(77): Auth->validateToken()
+#4 /home/snakqsqe/public_html/api/chat/rooms.php(23): Auth->getCurrentUser()
+#5 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:55:49 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT'
+[19-Nov-2025 17:55:49 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/utils/Auth.php(55): Database->fetchOne()
+#3 /home/snakqsqe/public_html/api/utils/Auth.php(77): Auth->validateToken()
+#4 /home/snakqsqe/public_html/api/chat/rooms.php(23): Auth->getCurrentUser()
+#5 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 17:55:58 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT'
+[19-Nov-2025 17:55:58 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/utils/Auth.php(55): Database->fetchOne()
+#3 /home/snakqsqe/public_html/api/utils/Auth.php(77): Auth->validateToken()
+#4 /home/snakqsqe/public_html/api/chat/rooms.php(23): Auth->getCurrentUser()
+#5 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 19:01:00 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT'
+[19-Nov-2025 19:01:00 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/utils/Auth.php(55): Database->fetchOne()
+#3 /home/snakqsqe/public_html/api/utils/Auth.php(77): Auth->validateToken()
+#4 /home/snakqsqe/public_html/api/chat/messages.php(28): Auth->getCurrentUser()
+#5 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 19:01:10 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT'
+[19-Nov-2025 19:01:10 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/utils/Auth.php(55): Database->fetchOne()
+#3 /home/snakqsqe/public_html/api/utils/Auth.php(77): Auth->validateToken()
+#4 /home/snakqsqe/public_html/api/chat/messages.php(28): Auth->getCurrentUser()
+#5 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 19:03:09 Europe/Oslo] Query Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT'
+[19-Nov-2025 19:03:09 Europe/Oslo] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.id' in 'SELECT' in /home/snakqsqe/public_html/api/utils/Database.php:61
+Stack trace:
+#0 /home/snakqsqe/public_html/api/utils/Database.php(61): PDO->prepare()
+#1 /home/snakqsqe/public_html/api/utils/Database.php(74): Database->query()
+#2 /home/snakqsqe/public_html/api/utils/Auth.php(55): Database->fetchOne()
+#3 /home/snakqsqe/public_html/api/utils/Auth.php(77): Auth->validateToken()
+#4 /home/snakqsqe/public_html/api/chat/messages.php(28): Auth->getCurrentUser()
+#5 {main}
+  thrown in /home/snakqsqe/public_html/api/utils/Database.php on line 61
+[19-Nov-2025 19:04:52 Europe/Oslo] PHP Fatal error:  Uncaught Error: Call to undefined method Auth::authenticateRequest() in /home/snakqsqe/public_html/api/chat/messages.php:28
+Stack trace:
+#0 {main}
+  thrown in /home/snakqsqe/public_html/api/chat/messages.php on line 28
+[19-Nov-2025 19:05:26 Europe/Oslo] PHP Fatal error:  Uncaught Error: Call to undefined method Auth::authenticateRequest() in /home/snakqsqe/public_html/api/chat/messages.php:28
+Stack trace:
+#0 {main}
+  thrown in /home/snakqsqe/public_html/api/chat/messages.php on line 28
+[19-Nov-2025 19:08:15 Europe/Oslo] PHP Fatal error:  Uncaught Error: Call to undefined method Auth::authenticateRequest() in /home/snakqsqe/public_html/api/chat/messages.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/snakqsqe/public_html/api/chat/messages.php on line 31
+[20-Nov-2025 13:21:44 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)
+[20-Nov-2025 13:24:10 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)
+[20-Nov-2025 13:26:37 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)
+[20-Nov-2025 13:29:51 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)
+[20-Nov-2025 13:37:51 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)
+[20-Nov-2025 13:39:03 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)
+[20-Nov-2025 13:39:28 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)
+[20-Nov-2025 13:44:28 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)
+[20-Nov-2025 13:46:33 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)
+[20-Nov-2025 13:56:05 Europe/Oslo] Database Connection Error: SQLSTATE[28000] [1045] Access denied for user 'cpses_sn151brm8f'@'localhost' (using password: YES)

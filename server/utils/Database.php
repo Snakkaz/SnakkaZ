@@ -4,7 +4,12 @@
  * PDO-based database wrapper with prepared statements
  */
 
-require_once __DIR__ . '/../config/database.php';
+// Try new config file first, fallback to old
+if (file_exists(__DIR__ . '/../config/db-config.php')) {
+    require_once __DIR__ . '/../config/db-config.php';
+} else {
+    require_once __DIR__ . '/../config/database.php';
+}
 
 class Database {
     private static $instance = null;
